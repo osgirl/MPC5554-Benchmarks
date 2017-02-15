@@ -150,7 +150,7 @@ int main(void)
 		{
 			for (j = 0; j < COLUMNS; j++)
 			{
-				data[i][j] = i - j;
+				data[i][j] = 0;
 			}
 		}
   
