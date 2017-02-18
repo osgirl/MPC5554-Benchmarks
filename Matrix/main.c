@@ -1,3 +1,9 @@
+// Main.c
+// Last modified: 2/18/2017
+//            By: Ryan Owens
+//***********************************
+// This is the main file used to run matrix
+// benchmarks on the MPC5554 evaluation board.
 #include "MPC5554.h"
 #include "matrix.h"
 
@@ -5,15 +11,49 @@
 
 static unsigned int ticks[NUM_ITERATIONS] = {};
 
-
-int data[ROWS][COLUMNS] = {};
-int A[ROWS][COLUMNS] = {};
-int B[ROWS][COLUMNS] = {};
-int kernel[KROWS][KCOL] = {
+#if KSIZE == 3
+	int kernel[KSIZE][KSIZE] = {
 		{-1, -2, -1},
 		{0, 0, 0},
 		{1, 2, 1},
-};
+	};
+#elif KSIZE == 5
+	int kernel[KSIZE][KSIZE] = {
+		{-2, -3, -4, -3, -2},
+		{-1, -2, -3, -2, -1},
+		{0, 0, 0, 0, 0},
+		{1, 2, 3, 2, 1},
+		{2, 3, 4, 3, 2},
+	};
+#elif KSIZE == 7
+	int kernel[KSIZE][KSIZE] = {
+		{-3, -4, -5, -6, -5, -4, -3},
+		{-2, -3, -4, -5, -4, -3, -2},
+		{-1, -2, -3, -4, -3, -2, -1},
+		{0, 0, 0, 0, 0, 0, 0},
+		{1, 2, 3, 4, 3, 2, 1},
+		{2, 3, 4, 5, 4, 3, 2},
+		{3, 4, 5, 6, 5, 4, 3},
+	};
+#elif KSIZE == 9
+	int kernel[KSIZE][KSIZE] = {
+		{-4, -5, -6, -7, -8, -7, -6, -5, -4},
+		{-3, -4, -5, -6, -7, -6, -5, -4, -3},
+		{-2, -3, -4, -5, -6, -5, -4, -3, -2},
+		{-1, -2, -3, -4, -5, -4, -3, -2, -1},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{1, 2, 3, 4, 5, 4, 3, 2, 1},
+		{2, 3, 4, 5, 6, 5, 4, 3, 2},
+		{3, 4, 5, 6, 7, 6, 5, 4, 3},
+		{4, 5, 6, 7, 8, 7, 6, 5, 4},
+	};
+#endif
+// int matrix declarations
+int data[ROWS][COLUMNS] = {};
+int A[ROWS][COLUMNS] = {};
+int B[ROWS][COLUMNS] = {};
+
+// float matrix declarations
 /*float data[ROWS][COLUMNS] = {};
 float A[ROWS][COLUMNS] = {};
 float B[ROWS][COLUMNS] = {};*/
@@ -128,7 +168,7 @@ int main(void)
   //__disable_cache();
   
   
-  //setup the matrices
+  // Setup the matrices
   // Initialize the matrix to values i - j for each position.
   for (i = 0; i < ROWS; i++)
 		{
@@ -145,7 +185,7 @@ int main(void)
 				B[i][j] = i - j;
 			}
 		}
-		
+  // Initialize data to 0
   for (i = 0; i < ROWS; i++)
 		{
 			for (j = 0; j < COLUMNS; j++)
@@ -159,6 +199,8 @@ int main(void)
   {
      
      tb_before = __get_timebase();
+	 
+	  /* Comment/Uncomment to call the desired function */
 	  
 	 //matrix_Transpose(data, A);
      //matrix_MultF(data, A, B);
